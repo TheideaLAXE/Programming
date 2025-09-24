@@ -1,1 +1,2 @@
-Homework and projects from programming and OOP classes
+Homework and projects from programming classes
+
