@@ -13,7 +13,7 @@ struct List {
     }
 };
 
-void Insert(List &l, int x) {
+void SortInsert(List &l, int x) {
     Node* p = l.head;
     while (p->next && p->next->val < x)
         p = p->next;
@@ -40,7 +40,6 @@ int main() {
     int n;
     List l;
     while (std::cin>>n)
-        Insert(l, n);
-
+        InsertSort(l, n);
     Print(l);
 }
