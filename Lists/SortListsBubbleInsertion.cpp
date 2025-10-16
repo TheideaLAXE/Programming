@@ -6,10 +6,10 @@ struct Node {
 };
 
 struct List {
-    Node* head;
+    Node* start;
     List() {
-        head = new Node();   // dummy node
-        head->next = nullptr;
+        start = new Node();   // dummy node
+        start->next = nullptr;
     }
 };
 
@@ -19,7 +19,7 @@ void InsertionSort(List &l);
 void Print(List &l);
 
 void Insert(List &l, int x) {
-    Node *p = l.head;
+    Node *p = l.start;
     while (p->next)
         p = p->next;
     p->next = new Node();
@@ -28,8 +28,8 @@ void Insert(List &l, int x) {
 }
 
 void BubbleSort(List &l) {
-    if (!l.head) return;
-    Node *p, *q = l.head->next;  // skip dummy node
+    if (!l.start) return;
+    Node *p, *q = l.start->next;  // skip dummy node
     while (true) {
         bool Y = true;
         p = q;
@@ -48,11 +48,11 @@ void BubbleSort(List &l) {
 
 
 void InsertionSort(List &l) {
-    if (!l.head || !l.head->next) return;
-    Node *p = l.head;
+    if (!l.start || !l.start->next) return;
+    Node *p = l.start;
     while (p->next) {
         int x = p->next->val;
-        Node *q = l.head;
+        Node *q = l.start;
         while (q->next!=p->next && q->next->val<x)
             q=q->next;
         if (q->next==p->next) {
@@ -70,7 +70,7 @@ void InsertionSort(List &l) {
 }
 
 void Print(List &l) {
-    Node *p=l.head;
+    Node *p=l.start;
     while (p->next) {
         std::cout << p->next->val << " ";
         p=p->next;

@@ -6,10 +6,10 @@ struct Node {
 };
 
 struct List {
-    Node* head;
+    Node* start;
     List() {
-        head = new Node();   // dummy node
-        head->next = nullptr;
+        start = new Node();   // dummy node
+        start->next = nullptr;
     }
 };
 
@@ -21,7 +21,7 @@ void Merge(List &l1, List &l2);
 void DelDup(List &l);
 
 void Insert(List &l, int x) {
-    Node *p = l.head;
+    Node *p = l.start;
     while (p->next)
         p=p->next;
     p->next = new Node();
@@ -30,7 +30,7 @@ void Insert(List &l, int x) {
 }
 
 void SortInsert(List &l, int x) {
-    Node* p = l.head;
+    Node* p = l.start;
     while (p->next && p->next->val < x)
         p = p->next;
 
@@ -44,8 +44,8 @@ void SortInsert(List &l, int x) {
 }
 
 void BubbleSort(List &l) {
-    if (!l.head->next) return;
-    Node *p, *q = l.head->next;  // skip dummy node
+    if (!l.start->next) return;
+    Node *p, *q = l.start->next;  // skip dummy node
     while (true) {
         bool Y = true;
         p = q;
@@ -63,8 +63,8 @@ void BubbleSort(List &l) {
 }
 
 void Merge(List &l1, List &l2) {
-    if (!l1.head || !l2.head) return;
-    Node *p = l2.head->next;  // skip dummy node
+    if (!l1.start || !l2.start) return;
+    Node *p = l2.start->next;  // skip dummy node
     while (p) {
         SortInsert(l1, p->val);
         p = p->next;
@@ -72,9 +72,9 @@ void Merge(List &l1, List &l2) {
 }
 
 void DelDup(List &l) {
-    if (!l.head->next) return;
-    if (!l.head->next->next) return;
-    Node *p = l.head->next;
+    if (!l.start->next) return;
+    if (!l.start->next->next) return;
+    Node *p = l.start->next;
     while (p->next) {
         if (p->val == p->next->val) {
             Node * q=p->next->next;
@@ -87,7 +87,7 @@ void DelDup(List &l) {
 }
 
 void Print(List &l) {
-    Node *p=l.head;
+    Node *p=l.start;
     while (p->next) {
         std::cout << p->next->val << " ";
         p=p->next;

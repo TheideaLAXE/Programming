@@ -6,15 +6,15 @@ struct Node {
 };
 
 struct List {
-    Node* head;
+    Node* start;
     List() {
-        head = new Node();   // dummy node
-        head->next = nullptr;
+        start = new Node();   // dummy node
+        start->next = nullptr;
     }
 };
 
 void SortInsert(List &l, int x) {
-    Node* p = l.head;
+    Node* p = l.start;
     while (p->next && p->next->val < x)
         p = p->next;
 
@@ -28,7 +28,7 @@ void SortInsert(List &l, int x) {
 }
 
 void Print(List &l) {
-    Node *p=l.head;
+    Node *p=l.start;
     while (p->next) {
         std::cout << p->next->val << " ";
         p=p->next;
