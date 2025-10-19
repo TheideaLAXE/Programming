@@ -60,30 +60,30 @@ void DubListAdd(DubList &l, int x, Node *after=nullptr) {
     }
 }
 
-void DubListRemove(DubList &l, Node *remnode) {
-    Node *p=l.start;
-    bool InList=false;
-    while (p->next) {   //O(n) to check if the node belongs in the list
-        if (p->next==remnode) {
-            InList=true;
-            break;
-        }
-        p=p->next;
-    }
-    if (!InList)
-        return;
+void DubListRemove(DubList &l, int x, bool All = false) {
+    Node *p;
+    if (l.start)
+        p = l.start->next;
+    else
+        p = nullptr;
+    while (p) {
+        if (p->val == x) {
+            Node *toDelete = p;
+            Node *next = p->next;
+            Node *prev = p->prev;
 
-    if (remnode==nullptr) return;
-    p = remnode->prev;
-    if (remnode->next) {
-        Node *q = remnode->next;
-        p->next = q;
-        q->prev = p;
-        delete remnode;
-    }
-    else {
-        p->next = nullptr;
-        delete remnode;
+            if (prev)
+                prev->next = next;
+            if (next)
+                next->prev = prev;
+
+            delete toDelete;
+            if (!All)
+                return;
+            p = next;
+        } else {
+            p = p->next;
+        }
     }
 }
 
@@ -103,6 +103,7 @@ void DubListPrint(const DubList &l) {
         std::cout << p->next->val << " ";
         p = p->next;
     }
+    std::cout << "\n";
 }
 
 int main() {
@@ -113,8 +114,12 @@ int main() {
     Node *p = DubListFind(l, 3);
     std::cout << p << "\n";
     DubListPrint(l);
+    DubListRemove(l, 3);
+    DubListPrint(l);
+    DubListRemove(l, 3, 1);
+    DubListPrint(l);
 
     return 0;
 }
 
-//1 2 3 4 5 6 7 8 9 0 9 8 7 6 5 4 3 2 1 a
+//1 2 3 4 5 6 7 8 9 0 3 3 3 9 8 7 6 5 4 3 2 1 a
