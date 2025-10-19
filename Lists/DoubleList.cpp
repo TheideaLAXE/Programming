@@ -9,7 +9,7 @@ struct DubList {
     Node* start;
     DubList() {
         start = new Node();
-        start->val = -1; //no grabo
+        start->val = -1;
         start->next = nullptr;
         start->prev = nullptr;
     }
@@ -21,8 +21,8 @@ void DubListRemove(DubList &l, Node *remnode);
 void DubListPrint(const DubList &l);
 Node * DubListFind(const DubList &l, int val);
 
-void DubListAdd(DubList &l, int x, Node *whereafter=nullptr) {
-    if (whereafter==nullptr) {
+void DubListAdd(DubList &l, int x, Node *after=nullptr) {
+    if (after==nullptr) {
         Node *p = l.start;
         while (p->next)
             p = p->next;
@@ -33,41 +33,48 @@ void DubListAdd(DubList &l, int x, Node *whereafter=nullptr) {
         p->next = q;
     }
     else {
-        Node *p = whereafter;
+        Node *p = l.start;
+        bool InList = false;
+        while (p->next) {   //O(n) to check if the node belongs in the list
+            if (p->next==after) {
+                InList = true;
+                break;
+            }
+            p = p->next;
+        }
+        if (!InList)
+            return;
         Node *q = new Node();
         q->val = x;
-        if (p->next) {
-            q->next = p->next;
-            p->next->prev = q;
-            q->prev = p;
-            p->next = q;
+        if (after->next) {
+            q->next = after->next;
+            after->next->prev = q;
+            q->prev = after;
+            after->next = q;
         }
         else {
             q->next = nullptr;
-            q->prev = p;
-            p->next = q;
+            q->prev = after;
+            after->next = q;
         }
     }
 }
 
 void DubListRemove(DubList &l, Node *remnode) {
-    Node *t=l.start;
-    bool B=false;
-    while (t->next) { //O(n) to check if the node belongs in the list
-        if (t->next==remnode) {
-            B=true;
+    Node *p=l.start;
+    bool InList=false;
+    while (p->next) {   //O(n) to check if the node belongs in the list
+        if (p->next==remnode) {
+            InList=true;
             break;
         }
-        t=t->next;
+        p=p->next;
     }
-    if (!B)
+    if (!InList)
         return;
 
-
     if (remnode==nullptr) return;
-    Node *p = remnode;
-    if (p==l.start) return;
-    p=p->prev;
+    p = remnode->prev;
     if (remnode->next) {
         Node *q = remnode->next;
         p->next = q;
@@ -99,7 +106,15 @@ void DubListPrint(const DubList &l) {
 }
 
 int main() {
+    int n;
     DubList l;
+    while (std::cin>>n)
+        DubListAdd(l, n);
+    Node *p = DubListFind(l, 3);
+    std::cout << p << "\n";
+    DubListPrint(l);
 
     return 0;
 }
+
+//1 2 3 4 5 6 7 8 9 0 9 8 7 6 5 4 3 2 1 a

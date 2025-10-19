@@ -28,48 +28,54 @@ void Insert(List &l, int x) {
 }
 
 void BubbleSort(List &l) {
-    if (!l.start) return;
-    Node *p, *q = l.start->next;  // skip dummy node
+    if (!l.start->next) return;
+    Node *q = l.start->next;  //skip dummy node
     while (true) {
-        bool Y = true;
-        p = q;
+        bool sorted = true;
+        Node *p = q;
         while (p->next) {
             if (p->val > p->next->val) {
                 int temp = p->val;
                 p->val = p->next->val;
                 p->next->val = temp;
-                Y = false;
+                sorted = false;
             }
             p = p->next;
         }
-        if (Y) break;
+        if (sorted) break;
     }
 }
 
 
 void InsertionSort(List &l) {
-    if (!l.start || !l.start->next) return;
-    Node *p = l.start;
-    while (p->next) {
-        int x = p->next->val;
-        Node *q = l.start;
-        while (q->next!=p->next && q->next->val<x)
-            q=q->next;
-        if (q->next==p->next) {
-            p=p->next;
+    if (!l.start->next || !l.start->next->next) return;
+
+    Node *sortedEnd = l.start->next;
+    Node *p = sortedEnd->next;
+
+    while (p) {
+        if (p->val >= sortedEnd->val) {
+            sortedEnd = p;
+            p = p->next;
             continue;
         }
-        Node* p1=p->next;
-        p->next = p1->next;
-        Node *t = new Node();
-        t->val = x;
-        t->next = q->next;
-        q->next = t;
-        delete p1;
+
+        Node *t = p->next;
+        sortedEnd->next = t;
+
+        Node *q = l.start;
+        while (q->next && q->next->val < p->val) {
+            q = q->next;
+        }
+
+        p->next = q->next;
+        q->next = p;
+
+        p = t;
     }
 }
 
-void Print(List &l) {
+void Print(const List &l) {
     Node *p=l.start;
     while (p->next) {
         std::cout << p->next->val << " ";

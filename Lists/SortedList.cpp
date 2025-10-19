@@ -23,11 +23,14 @@ void SortInsert(List &l, int x) {
 
     Node* q = new Node();
     q->val = x;
-    q->next = p->next;
+    if (p->next)
+        q->next = p->next;
+    else
+        q->next = nullptr;
     p->next = q;
 }
 
-void Print(List &l) {
+void Print(const List &l) {
     Node *p=l.start;
     while (p->next) {
         std::cout << p->next->val << " ";
@@ -40,6 +43,6 @@ int main() {
     int n;
     List l;
     while (std::cin>>n)
-        InsertSort(l, n);
+        SortInsert(l, n);
     Print(l);
 }

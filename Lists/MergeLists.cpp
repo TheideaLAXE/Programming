@@ -14,10 +14,9 @@ struct List {
 };
 
 void Insert(List &l, int x);
-void SortInsert(List &l, int x);
-void Print(List &l);
+void Print(const List &l);
 void BubbleSort(List &l);
-void Merge(List &l1, List &l2);
+void MergePoint(List &l1, List &l2);
 void DelDup(List &l);
 
 void Insert(List &l, int x) {
@@ -29,46 +28,32 @@ void Insert(List &l, int x) {
     p->next->next = nullptr;
 }
 
-void SortInsert(List &l, int x) {
-    Node* p = l.start;
-    while (p->next && p->next->val < x)
-        p = p->next;
-
-    if (p->next && p->next->val == x)
-        return;
-
-    Node* q = new Node();
-    q->val = x;
-    q->next = p->next;
-    p->next = q;
-}
-
 void BubbleSort(List &l) {
     if (!l.start->next) return;
-    Node *p, *q = l.start->next;  // skip dummy node
+    Node *q = l.start->next;  //skip dummy node
     while (true) {
-        bool Y = true;
-        p = q;
+        bool sorted = true;
+        Node *p = q;
         while (p->next) {
             if (p->val > p->next->val) {
                 int temp = p->val;
                 p->val = p->next->val;
                 p->next->val = temp;
-                Y = false;
+                sorted = false;
             }
             p = p->next;
         }
-        if (Y) break;
+        if (sorted) break;
     }
 }
 
-void Merge(List &l1, List &l2) {
-    if (!l1.start || !l2.start) return;
-    Node *p = l2.start->next;  // skip dummy node
-    while (p) {
-        SortInsert(l1, p->val);
-        p = p->next;
-    }
+void MergePoint(List &l1, List &l2) {
+    Node *p1 = l1.start;
+    while (p1->next)
+        p1 = p1->next;
+    p1->next=l2.start->next;
+    delete l2.start;
+    l2.start=nullptr;
 }
 
 void DelDup(List &l) {
@@ -86,7 +71,7 @@ void DelDup(List &l) {
     }
 }
 
-void Print(List &l) {
+void Print(const List &l) {
     Node *p=l.start;
     while (p->next) {
         std::cout << p->next->val << " ";
@@ -105,8 +90,8 @@ int main() {
     while (std::cin>>n) {
         Insert(l2, n);
     }
+    MergePoint(l1, l2);
     BubbleSort(l1);
     DelDup(l1);
-    Merge(l1, l2);
     Print(l1);
 }
