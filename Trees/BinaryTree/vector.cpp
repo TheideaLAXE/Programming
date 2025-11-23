@@ -1,6 +1,8 @@
 #include <iostream>
 #include <climits>
 #include <vector>
+#include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -76,15 +78,74 @@ void postorder(const vector<int> &v, const int p=0) {
 }
 
 void preorder2(const vector<int> &v) {
-    //TODO
-}
-void inorder2(const vector<int> &v) {
-    //TODO
-}
-void postorder2(const vector<int> &v) {
-    //TODO
+    if (v.empty() || v[0]==INT_MIN) return;
+    stack<int> st;
+    st.push(0);
+    while (!st.empty()) {
+        const int i = st.top();
+        st.pop();
+        if (i >= v.size() || v[i]==INT_MIN) continue;
+        cout << v[i] << " ";
+       const  int r = 2*i+2;
+        const int l = 2*i+1;
+        if (r < v.size() && v[r]!=INT_MIN) st.push(r);
+        if (l < v.size() && v[l]!=INT_MIN) st.push(l);
+    }
 }
 
+void inorder2(const vector<int> &v) {
+    if (v.empty() || v[0]==INT_MIN) return;
+    stack<int> st;
+    int curr = 0;
+    while (!st.empty() || (curr < v.size() && v[curr]!=INT_MIN)) {
+        while (curr < v.size() && v[curr]!=INT_MIN) {
+            st.push(curr);
+            curr = 2*curr+1;
+        }
+        if (st.empty()) break;
+        curr = st.top();
+        st.pop();
+        cout << v[curr] << " ";
+        curr = 2*curr+2;
+    }
+}
+
+void postorder2(const vector<int> &v) {
+    if (v.empty() || v[0]==INT_MIN) return;
+    stack<int> s1, s2;
+    s1.push(0);
+    while (!s1.empty()) {
+        const int i = s1.top();
+        s1.pop();
+        if (i >= v.size() || v[i]==INT_MIN) continue;
+        s2.push(i);
+        const int l = 2*i+1;
+        const int r = 2*i+2;
+        if (l < v.size() && v[l]!=INT_MIN) s1.push(l);
+        if (r < v.size() && v[r]!=INT_MIN) s1.push(r);
+    }
+    while (!s2.empty()) {
+        cout << v[s2.top()] << " ";
+        s2.pop();
+    }
+}
+
+void bfs(const vector<int> &v) {
+    if (v.empty() || v[0]==INT_MIN) return;
+    queue<int> q;
+    q.push(0);
+
+    while (!q.empty()) {
+        const int i = q.front();
+        q.pop();
+        if (i >= v.size() || v[i]==INT_MIN) continue;
+        cout << v[i] << " ";
+        const int l = 2*i+1;
+        const int r = 2*i+2;
+        if (l < v.size() && v[l]!=INT_MIN) q.push(l);
+        if (r < v.size() && v[r]!=INT_MIN) q.push(r);
+    }
+}
 
 int main() {
     int n;
@@ -93,17 +154,30 @@ int main() {
     int x;
     for (int i=0; i<n; i++) {
         cin >> x;
-        insertBST(v, x);
+        insertBT(v, x);
     }
+    cout << sum(v) << "\n";
     preorder(v);
     cout << "\n";
-
     inorder(v);
     cout << "\n";
-
     postorder(v);
     cout << "\n";
-
-
+    for (int i=0; i<10; i++) {
+        cout << findBT(v, i) << " ";
+    }
+    cout << "\n\n\n";
+    bfs(v);
     return 0;
 }
+
+/*
+7
+1 2 3 4 5 6 7
+
+28
+1 2 4 5 3 6 7
+4 2 5 1 6 3 7
+4 5 2 6 7 3 1
+0 1 1 1 1 1 1 1 0 0
+ */
