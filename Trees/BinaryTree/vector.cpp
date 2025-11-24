@@ -79,32 +79,32 @@ void postorder(const vector<int> &v, const int p=0) {
 
 void preorder2(const vector<int> &v) {
     if (v.empty() || v[0]==INT_MIN) return;
-    stack<int> st;
-    st.push(0);
-    while (!st.empty()) {
-        const int i = st.top();
-        st.pop();
+    stack<int> s;
+    s.push(0);
+    while (!s.empty()) {
+        const int i = s.top();
+        s.pop();
         if (i >= v.size() || v[i]==INT_MIN) continue;
         cout << v[i] << " ";
-       const  int r = 2*i+2;
+        const  int r = 2*i+2;
         const int l = 2*i+1;
-        if (r < v.size() && v[r]!=INT_MIN) st.push(r);
-        if (l < v.size() && v[l]!=INT_MIN) st.push(l);
+        if (r < v.size() && v[r]!=INT_MIN) s.push(r);
+        if (l < v.size() && v[l]!=INT_MIN) s.push(l);
     }
 }
 
 void inorder2(const vector<int> &v) {
     if (v.empty() || v[0]==INT_MIN) return;
-    stack<int> st;
+    stack<int> s;
     int curr = 0;
-    while (!st.empty() || (curr < v.size() && v[curr]!=INT_MIN)) {
+    while (!s.empty() || (curr < v.size() && v[curr]!=INT_MIN)) {
         while (curr < v.size() && v[curr]!=INT_MIN) {
-            st.push(curr);
+            s.push(curr);
             curr = 2*curr+1;
         }
-        if (st.empty()) break;
-        curr = st.top();
-        st.pop();
+        if (s.empty()) break;
+        curr = s.top();
+        s.pop();
         cout << v[curr] << " ";
         curr = 2*curr+2;
     }

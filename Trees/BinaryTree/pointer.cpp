@@ -1,7 +1,7 @@
 #include <iostream>
 #include <climits>
 #include <stack>
-
+#include <queue>
 using namespace std;
 
 struct BT {
@@ -100,7 +100,7 @@ void postorder(const BT *r) {
 }
 
 void preorder2(const BT *r) {
-    if (r->val==INT_MIN) return;
+    if (!r || r->val == INT_MIN) return;
     stack<const BT*> st;
     st.push(r);
 
@@ -109,55 +109,40 @@ void preorder2(const BT *r) {
         st.pop();
         cout << curr->val << " ";
         if (curr->right) st.push(curr->right);
-        if (curr->left) st.push(curr->left);
+        if (curr->left)  st.push(curr->left);
     }
 }
 
 void inorder2(const BT *r) {
-    if (!r || r->val==INT_MIN) return;
-    const BT* s[1000];
-    int top = -1;
+    if (!r || r->val == INT_MIN) return;
+    stack<const BT*> s;
     const BT* curr = r;
-
-    while (top >= 0 || curr) {
+    while (curr || !s.empty()) {
         while (curr) {
-            top++;
-            s[top] = curr;
+            s.push(curr);
             curr = curr->left;
         }
-        curr = s[top];
-        top--;
+        curr = s.top();
+        s.pop();
         cout << curr->val << " ";
         curr = curr->right;
     }
 }
 
 void postorder2(const BT *r) {
-    if (!r || r->val==INT_MIN) return;
-    const BT* s1[1000];
-    const BT* s2[1000];
-    int top1 = 0, top2 = -1;
-    s1[top1] = r;
-
-    while (top1 >= 0) {
-        const BT* curr = s1[top1];
-        top1--;
-
-        top2++;
-        s2[top2] = curr;
-
-        if (curr->left) {
-            top1++;
-            s1[top1] = curr->left;
-        }
-        if (curr->right) {
-            top1++;
-            s1[top1] = curr->right;
-        }
+    if (!r || r->val == INT_MIN) return;
+    stack<const BT*> s1, s2;
+    s1.push(r);
+    while (!s1.empty()) {
+        const BT* curr = s1.top();
+        s1.pop();
+        s2.push(curr);
+        if (curr->left)  s1.push(curr->left);
+        if (curr->right) s1.push(curr->right);
     }
-    while (top2 >= 0) {
-        cout << s2[top2]->val << " ";
-        top2--;
+    while (!s2.empty()) {
+        cout << s2.top()->val << " ";
+        s2.pop();
     }
 }
 
@@ -168,26 +153,16 @@ int sum(const BT *r) {
     return s;
 }
 
-
-
 void bfs(const BT *r) {
     if (!r || r->val == INT_MIN) return;
-    const BT* q[1000];
-    int front = 0, back = 0;
-    q[back] = r;
-    back++;
+    queue<const BT*> q;
+    q.push(r);
 
-    while (front < back) {
-        const BT* curr = q[front++];
+    while (!q.empty()) {
+        const BT* curr = q.front(); q.pop();
         cout << curr->val << " ";
-        if (curr->left) {
-            q[back] = curr->left;
-            back++;
-        }
-        if (curr->right) {
-            q[back] = curr->right;
-            back++;
-        }
+        if (curr->left)  q.push(curr->left);
+        if (curr->right) q.push(curr->right);
     }
 }
 
