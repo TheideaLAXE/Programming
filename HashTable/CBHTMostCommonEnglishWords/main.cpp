@@ -11,6 +11,9 @@ struct Node {
         word = "";
         next=nullptr;
     }
+    ~Node() {
+        delete next;
+    }
 };
 
 int hF_WordLength(const string &s) { //0
